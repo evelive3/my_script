@@ -37,8 +37,8 @@ def conversion(s):
             if dec <= n_bit:
                 yield dec
         # 将Remainder列表反序，逐位转换为相应字母
-        col_name = ''.join([chr(x + 64) for x in list(dec_to_n(int(rxcy[0]), 26))[::-1]])
-        return '{0}{1}'.format(col_name, rxcy[1])
+        col_name = ''.join([chr(x + 64) for x in list(dec_to_n(int(rxcy[1]), 26))[::-1]])
+        return '{0}{1}'.format(col_name, rxcy[0])
     # 都不是，报错退出
     raise ValueError('输入值不符合预期')
 

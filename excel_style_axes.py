@@ -14,18 +14,23 @@ Problem Description:
 import re
 
 
-def conversion(s):
+def conversion(axes_string):
     # 先判断是否为excel_like模式
-    is_excel_like = re.match(r'^([A-Za-z]+)(\d+)$', s)
+    is_excel_like = re.match(r'^([A-Za-z]+)(\d+)$', axes_string)
     if is_excel_like is not None:
         excel_like = is_excel_like.groups()
-        # 将CC反序，逐位取值并减去与大写字母A的asc码距离值，得到其26进制数字值，再进行N进制转10进制计算
-        col_num = sum([(26**n) * (ord(x)-64) for n, x in enumerate(excel_like[0][::-1].upper())])
-        return 'R{0}C{1}'.format(excel_like[1], col_num)
+        col_name = excel_like[0].upper()
+        row_number = excel_like[1]
+        # 将col_name反序，逐位减去与大写字母A的asc码距离值，得到其26进制数字值，再进行26进制转10进制计算
+        col_num = sum([(26**n) * (ord(x)-64) for n, x in enumerate(col_name[::-1])])
+        return 'R{0}C{1}'.format(row_number, col_num)
     # 再判断是否为RxCy模式
-    is_rxcy = re.match(r'^[R,r](\d+)[C,c](\d+)$', s)
+    is_rxcy = re.match(r'^[R,r](\d+)[C,c](\d+)$', axes_string)
     if is_rxcy is not None:
         rxcy = is_rxcy.groups()
+        col_number = rxcy[1]
+        row_number = rxcy[0]
+
         # 制作一个同时计算出商与余的函数
         f = lambda x, n: (x // n, x % n)
 
@@ -36,9 +41,10 @@ def conversion(s):
                 yield remainder
             if dec <= n_bit:
                 yield dec
+
         # 将Remainder列表反序，逐位转换为相应字母
-        col_name = ''.join([chr(x + 64) for x in list(dec_to_n(int(rxcy[1]), 26))[::-1]])
-        return '{0}{1}'.format(col_name, rxcy[0])
+        col_name = ''.join([chr(x + 64) for x in list(dec_to_n(int(col_number), 26))[::-1]])
+        return '{0}{1}'.format(col_name, row_number)
     # 都不是，报错退出
     raise ValueError('输入值不符合预期')
 

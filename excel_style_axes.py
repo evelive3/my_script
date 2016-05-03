@@ -22,8 +22,8 @@ def conversion(axes_string):
         col_name = excel_like[0].upper()
         row_number = excel_like[1]
         # 将col_name反序，逐位减去与大写字母A的asc码距离值，得到其26进制数字值，再进行26进制转10进制计算
-        col_num = sum([(26**n) * (ord(x)-64) for n, x in enumerate(col_name[::-1])])
-        return 'R{0}C{1}'.format(row_number, col_num)
+        col_number = sum([(26**n) * (ord(x)-64) for n, x in enumerate(col_name[::-1])])
+        return 'R{0}C{1}'.format(row_number, col_number)
     # 再判断是否为RxCy模式
     is_rxcy = re.match(r'^[R,r](\d+)[C,c](\d+)$', axes_string)
     if is_rxcy is not None:
